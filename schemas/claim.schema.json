@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/metabolic-engineering-forensics/claim.schema.json",
+  "title": "Metabolic Engineering Forensic Claim",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["claim_id", "citation", "claim_text", "status", "dependencies"],
+  "properties": {
+    "claim_id": {"type": "string", "minLength": 1},
+    "citation": {"type": "string", "minLength": 1},
+    "claim_text": {"type": "string", "minLength": 1},
+    "reported_value": {"type": ["number", "string", "null"]},
+    "unit": {"type": ["string", "null"]},
+    "tolerance": {"type": ["number", "null"], "minimum": 0},
+    "status": {
+      "enum": ["PENDING", "VERIFIED", "INCOMPLETE", "INCONSISTENT", "UNVERIFIABLE"]
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/dependency"}
+    },
+    "findings": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/finding"},
+      "default": []
+    }
+  },
+  "$defs": {
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "required", "availability"],
+      "properties": {
+        "id": {"type": "string"},
+        "kind": {
+          "enum": ["source_observation", "identity", "state", "transformation", "derived_observation", "assertion"]
+        },
+        "required": {"type": "boolean"},
+        "availability": {"enum": ["available", "described_unavailable", "missing", "unknown"]},
+        "source": {"type": ["string", "null"]},
+        "sha256": {"type": ["string", "null"], "pattern": "^[a-fA-F0-9]{64}$"},
+        "version": {"type": ["string", "null"]},
+        "notes": {"type": ["string", "null"]}
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["test", "result", "evidence", "interpretation"],
+      "properties": {
+        "test": {"pattern": "^T(10|[1-9])$", "type": "string"},
+        "result": {"enum": ["PASS", "FAIL", "UNRESOLVED", "NOT_APPLICABLE"]},
+        "evidence": {"type": "string"},
+        "interpretation": {"type": "string"}
+      }
+    }
+  }
+}
