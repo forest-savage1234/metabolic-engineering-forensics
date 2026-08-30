@@ -10,13 +10,14 @@ Can digital-forensic verification principles strengthen metabolic-engineering re
 
 ## Design
 
-One verification protocol is applied consistently across three primary case studies:
+One verification protocol is applied consistently across four case studies:
 
 1. Kim et al. (2019), *Engineering of an oleaginous bacterium for the production of fatty acids and fuels*.
-2. Cho et al. (2026), 1,3-propanediol systems metabolic engineering case study.
+2. Cho et al. (2026), *High-titer, antibiotic-free, pilot-scale production of 1,3-propanediol by engineered Corynebacterium*.
 3. Park et al. (2022), *Metabolic engineering of Escherichia coli with electron channelling for the production of natural products*.
+4. Decembrino et al. (2021), *Synthesis of (−)-deoxypodophyllotoxin and (−)-epipodophyllotoxin via a multi-enzyme cascade in E. coli*.
 
-A 2021 podophyllotoxin multi-enzyme cascade study is retained as a benchmark case.
+The same tests and state semantics apply to every case. The presentation case will be selected only after comparative reconstruction, based on scientific informativeness rather than the number of defects found.
 
 ## Verification principle
 
@@ -43,6 +44,8 @@ A publication is not treated as defective merely because an artifact is unavaila
 ## Research integrity
 
 The project distinguishes published source artifacts from derived analysis, records uncertainty explicitly, avoids silent normalization of conflicting evidence, and does not characterize missing provenance as evidence that an underlying scientific result is false.
+
+Synthetic perturbations are used only to evaluate verifier sensitivity after the unmodified publication artifacts have been assessed. They are never represented as defects in the source work.
 
 ## Status
 
