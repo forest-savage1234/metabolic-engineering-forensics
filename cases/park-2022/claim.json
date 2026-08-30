@@ -1,0 +1,16 @@
+{
+  "claim_id": "park-2022-lutein-titer",
+  "citation": "Park et al. (2022), Metabolic engineering of Escherichia coli with electron channelling for the production of natural products, Nature Catalysis",
+  "claim_text": "Bounded reconstruction target: reported lutein production result (218 mg/L).",
+  "reported_value": 218,
+  "unit": "mg/L",
+  "tolerance": null,
+  "status": "PENDING",
+  "dependencies": [
+    {"id":"publication","kind":"assertion","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"Primary publication."},
+    {"id":"source-data","kind":"source_observation","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Acquire and inventory publisher source-data spreadsheets."},
+    {"id":"strain-construct-state","kind":"state","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Resolve strain, P450/reductase/scaffold and other construct state relevant to bounded claim."},
+    {"id":"analytical-transformation","kind":"transformation","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Trace analytical observations and calculations to reported lutein titer."}
+  ],
+  "findings": []
+}
