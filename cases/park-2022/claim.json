@@ -1,16 +1,23 @@
 {
   "claim_id": "park-2022-lutein-titer",
-  "citation": "Park et al. (2022), Metabolic engineering of Escherichia coli with electron channelling for the production of natural products, Nature Catalysis",
-  "claim_text": "Bounded reconstruction target: reported lutein production result (218 mg/L).",
-  "reported_value": 218,
+  "citation": "Park et al. (2022), Metabolic engineering of Escherichia coli with electron channelling for the production of natural products, Nature Catalysis, DOI 10.1038/s41929-022-00820-4",
+  "claim_text": "Bounded reconstruction target: reported lutein production of 218.0 mg/L at 5.01 mg/L/h in fed-batch culture.",
+  "reported_value": 218.0,
   "unit": "mg/L",
   "tolerance": null,
   "status": "PENDING",
   "dependencies": [
-    {"id":"publication","kind":"assertion","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"Primary publication."},
-    {"id":"source-data","kind":"source_observation","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Acquire and inventory publisher source-data spreadsheets."},
-    {"id":"strain-construct-state","kind":"state","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Resolve strain, P450/reductase/scaffold and other construct state relevant to bounded claim."},
-    {"id":"analytical-transformation","kind":"transformation","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Trace analytical observations and calculations to reported lutein titer."}
+    {"id":"publication","kind":"assertion","required":true,"availability":"available","source":null,"sha256":null,"version":"2022 version of record","notes":"Primary publication reports 218.0 mg/L lutein and 5.01 mg/L/h productivity."},
+    {"id":"source-data","kind":"source_observation","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"Nature provides source-data spreadsheets for the paper, including source data for Fig. 7, the fed-batch fermentation figure supporting the bounded lutein result. Byte-level acquisition/hash remains pending."},
+    {"id":"supplementary-data","kind":"source_observation","required":false,"availability":"available","source":null,"sha256":null,"version":null,"notes":"Publisher exposes multiple supplementary XLSX datasets in addition to figure source data."},
+    {"id":"strain-construct-state","kind":"state","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"The final producing strain is LUT5MH1. The paper documents the electron-channelling/P450-reductase engineering context and subsequent metabolic/process optimization leading to the final strain."},
+    {"id":"fed-batch-process-state","kind":"state","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"The final reported run includes optimized fed-batch conditions and a two-hour carbon-starvation strategy before the final production phase; exact time-series parameters will be pinned during source-data replay."},
+    {"id":"analytical-transformation","kind":"transformation","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Trace the released Fig. 7 observations and analytical method to the reported 218.0 mg/L concentration and 5.01 mg/L/h productivity before adjudicating reconstruction."}
   ],
-  "findings": []
+  "findings": [
+    {"test":"T1","result":"PASS","evidence":"The publication identifies the final LUT5MH1 fed-batch result as 218.0 mg/L lutein with 5.01 mg/L/h productivity.","interpretation":"The bounded claim and producing strain are identifiable."},
+    {"test":"T2","result":"UNRESOLVED","evidence":"Figure-level source data and supplementary datasets are publicly exposed, but artifact-level mapping from released observations through the analytical transformation to the headline value has not yet been replayed.","interpretation":"The evidence package appears suitable for positive reconstruction, but dependency closure is not yet established."},
+    {"test":"T4","result":"UNRESOLVED","evidence":"Publisher source artifacts are available but immutable local hashes have not yet been recorded by this project.","interpretation":"Source-state integrity remains pending until byte acquisition and hashing."},
+    {"test":"T6","result":"UNRESOLVED","evidence":"The source-data package supports a reconstruction attempt, but 218.0 mg/L and 5.01 mg/L/h have not yet been independently recomputed by this project.","interpretation":"Do not label the claim VERIFIED before replay."}
+  ]
 }
