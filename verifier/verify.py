@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 FINAL = {"VERIFIED", "INCOMPLETE", "INCONSISTENT", "UNVERIFIABLE"}
+CONFLICT_TESTS = {"T3", "T4"}
 
 
 def sha256(path: Path) -> str:
@@ -21,11 +22,12 @@ def sha256(path: Path) -> str:
 
 
 def verify(manifest: dict[str, Any], root: Path) -> dict[str, Any]:
-    findings: list[dict[str, str]] = []
+    generated: list[dict[str, str]] = []
+    declared_findings = manifest.get("findings", [])
     required = [d for d in manifest.get("dependencies", []) if d.get("required")]
 
-    unresolved = []
-    inconsistent = []
+    unresolved: list[str] = []
+    byte_conflicts: list[str] = []
     checked_hashes = 0
 
     for dep in required:
@@ -43,53 +45,68 @@ def verify(manifest: dict[str, Any], root: Path) -> dict[str, Any]:
                 continue
             checked_hashes += 1
             if sha256(p).lower() != expected.lower():
-                inconsistent.append(dep["id"])
+                byte_conflicts.append(dep["id"])
 
-    if unresolved:
-        findings.append({
-            "test": "T2",
-            "result": "UNRESOLVED",
-            "evidence": ", ".join(unresolved),
-            "interpretation": "One or more required dependencies are not available for verification."
-        })
-    else:
-        findings.append({
-            "test": "T2", "result": "PASS", "evidence": "all required dependencies available",
-            "interpretation": "The manifest declares closure over required dependencies."
-        })
+    generated.append({
+        "test": "T2",
+        "result": "UNRESOLVED" if unresolved else "PASS",
+        "evidence": ", ".join(unresolved) if unresolved else "all required dependencies declared available",
+        "interpretation": (
+            "One or more required dependencies are not available for verification."
+            if unresolved else
+            "The manifest declares availability closure over required dependencies; reconstruction is evaluated separately."
+        ),
+    })
 
-    if inconsistent:
-        findings.append({
-            "test": "T4", "result": "FAIL", "evidence": ", ".join(inconsistent),
+    if byte_conflicts:
+        generated.append({
+            "test": "T4", "result": "FAIL", "evidence": ", ".join(byte_conflicts),
             "interpretation": "Observed artifact bytes do not match the recorded reference state."
         })
     elif checked_hashes:
-        findings.append({
+        generated.append({
             "test": "T4", "result": "PASS", "evidence": f"{checked_hashes} digest(s) matched",
             "interpretation": "Checked artifact bytes match their recorded source state."
         })
 
-    # Fail closed. A VERIFIED result requires explicit reconstruction evidence;
-    # dependency availability alone is never sufficient.
-    explicit_reconstruction = any(
+    explicit_conflicts = [
+        f for f in declared_findings
+        if f.get("test") in CONFLICT_TESTS and f.get("result") == "FAIL"
+    ]
+    reconstruction_pass = any(
         f.get("test") == "T6" and f.get("result") == "PASS"
-        for f in manifest.get("findings", [])
+        for f in declared_findings
+    )
+    reconstruction_fail = any(
+        f.get("test") == "T6" and f.get("result") == "FAIL"
+        for f in declared_findings
     )
 
-    if inconsistent:
+    # Verdict precedence is deliberately fail-closed. An observed integrity conflict
+    # outranks missing evidence; missing evidence outranks absence of reconstruction.
+    if byte_conflicts or explicit_conflicts or reconstruction_fail:
         status = "INCONSISTENT"
     elif unresolved:
         status = "INCOMPLETE"
-    elif not explicit_reconstruction:
+    elif not reconstruction_pass:
         status = "UNVERIFIABLE"
     else:
         status = "VERIFIED"
+
+    blockers = {
+        "unresolved_dependencies": unresolved,
+        "byte_state_conflicts": byte_conflicts,
+        "declared_conflicts": [f.get("test") for f in explicit_conflicts],
+        "reconstruction_failed": reconstruction_fail,
+        "reconstruction_passed": reconstruction_pass,
+    }
 
     assert status in FINAL
     return {
         "claim_id": manifest.get("claim_id"),
         "status": status,
-        "generated_findings": findings,
+        "blockers": blockers,
+        "generated_findings": generated,
         "principle": "Status concerns evidentiary reconstruction, not biological truth."
     }
 
