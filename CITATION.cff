@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this research artifact, please cite it."
+title: "Metabolic Engineering Forensics"
+type: software
+authors:
+  - family-names: "Savage"
+    given-names: "Forest"
+repository-code: "https://github.com/forest-savage1234/metabolic-engineering-forensics"
+version: "0.1.0-dev"
+date-released: "2026-08-29"
+abstract: "A fail-closed, provenance-centered framework for testing whether bounded metabolic-engineering claims can be reconstructed and integrity-verified from their published experimental and computational evidence."
+keywords:
+  - metabolic engineering
+  - provenance
+  - reproducibility
+  - digital forensics
+  - evidence integrity
+  - scientific workflows
