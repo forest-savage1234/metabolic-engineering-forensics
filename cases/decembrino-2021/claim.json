@@ -5,7 +5,7 @@
   "reported_value": 78,
   "unit": "mg/L",
   "tolerance": null,
-  "status": "INCOMPLETE",
+  "status": "INCONSISTENT",
   "dependencies": [
     {"id":"publication","kind":"assertion","required":true,"availability":"available","source":null,"sha256":null,"version":"2021-09-20 version of record","notes":"Primary open-access publication; DOI 10.1186/s12934-021-01673-5."},
     {"id":"supplementary-information","kind":"source_observation","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"Publisher supplementary PDF contains DNA sequences, plasmid information, LC/MS methods, qualitative references, quantitative-analysis formulas and supporting figures/tables."},
