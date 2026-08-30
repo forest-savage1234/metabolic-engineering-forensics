@@ -1,16 +1,24 @@
 {
   "claim_id": "kim-2019-ffa-titer",
-  "citation": "Kim et al. (2019), Engineering of an oleaginous bacterium for the production of fatty acids and fuels, Nature Chemical Biology",
-  "claim_text": "Bounded reconstruction target: reported free-fatty-acid fed-batch production result (50.2 g/L).",
+  "citation": "Kim et al. (2019), Engineering of an oleaginous bacterium for the production of fatty acids and fuels, Nature Chemical Biology 15:721–729, DOI 10.1038/s41589-019-0295-5",
+  "claim_text": "Bounded reconstruction target: reported free-fatty-acid fed-batch production result of 50.2 g/L by engineered Rhodococcus opacus.",
   "reported_value": 50.2,
   "unit": "g/L",
   "tolerance": null,
   "status": "PENDING",
   "dependencies": [
-    {"id":"publication","kind":"assertion","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"Primary publication."},
-    {"id":"fed-batch-source-data","kind":"source_observation","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Acquire and hash the publisher-provided raw fed-batch dataset before adjudicating availability."},
-    {"id":"strain-state","kind":"state","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Resolve exact producing strain/genotype and construct state from publication artifacts."},
-    {"id":"analytical-transformation","kind":"transformation","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Trace measurement/calculation steps necessary to derive the bounded titer claim."}
+    {"id":"publication","kind":"assertion","required":true,"availability":"available","source":null,"sha256":null,"version":"2019-06-17 version of record","notes":"Primary publication explicitly reports 50.2 g/L FFA."},
+    {"id":"supplementary-information","kind":"source_observation","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"Publisher SI includes strain/plasmid tables, replicate summaries, methods notes and additional fermentation figures."},
+    {"id":"fed-batch-source-data","kind":"source_observation","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"Nature exposes Supplementary Dataset 1, described as raw data of fed-batch fermentations. Exact byte-level acquisition/hash is still pending."},
+    {"id":"model-reaction-data","kind":"source_observation","required":false,"availability":"available","source":null,"sha256":null,"version":null,"notes":"Nature exposes Supplementary Dataset 2 containing metabolic reactions for genome-scale modeling. This is not required for the bounded 50.2 g/L titer claim but is relevant to later model-provenance analysis."},
+    {"id":"strain-state","kind":"state","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"The 50.2 g/L run is reported for ROP1_34. SI identifies pROP1_34 as expressing R. opacus TAG lipase LPD05381 with Burkholderia cepacia lipase-specific foldase under Pace; manuscript states the FFA producer also carries acyl-CoA synthetase deletions and three-lipase engineering context."},
+    {"id":"replicate-state","kind":"state","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"SI documents five independent ROP1_34 fed-batch cultures with FFA titers 50.2, 47.2, 46.7, 49.2, 50.1 g/L, plus culture-level yield/productivity values."},
+    {"id":"analytical-transformation","kind":"transformation","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"The next audit step is to determine whether the public package preserves the measurement/calculation path from analytical observations to each reported FFA concentration, rather than only the processed fed-batch time series."}
   ],
-  "findings": []
+  "findings": [
+    {"test":"T1","result":"PASS","evidence":"The article abstract and SI both identify the 50.2 g/L FFA result; SI associates it with an ROP1_34 fed-batch run.","interpretation":"The bounded claim and producing run are identifiable."},
+    {"test":"T2","result":"UNRESOLVED","evidence":"Public Supplementary Dataset 1 is explicitly labeled raw fed-batch data, but byte-level inspection and the underlying analytical derivation of FFA concentration remain pending.","interpretation":"The evidence package is stronger than the podophyllotoxin case, but end-to-end dependency closure is not yet established."},
+    {"test":"T4","result":"UNRESOLVED","evidence":"Publisher artifacts are available, but no local immutable byte hashes have yet been recorded for the XLSX datasets.","interpretation":"Source-state integrity cannot yet be asserted by this project."},
+    {"test":"T6","result":"UNRESOLVED","evidence":"The 50.2 g/L value and multiple independent replicate summaries are public; independent recomputation from the released source dataset has not yet been completed.","interpretation":"Do not label the headline claim VERIFIED until the dataset is acquired and replayed."}
+  ]
 }
