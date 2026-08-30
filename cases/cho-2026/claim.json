@@ -1,18 +1,25 @@
 {
   "claim_id": "cho-2026-13pdo-titer",
-  "citation": "Cho et al. (2026), systems metabolic engineering of Corynebacterium glutamicum for 1,3-propanediol production",
-  "claim_text": "Bounded reconstruction target: reported 1,3-propanediol production result (141.5 g/L; 2.95 g/L/h).",
+  "citation": "Cho et al. (2026), High-titer, antibiotic-free, pilot-scale production of 1,3-propanediol by engineered Corynebacterium, Nature Chemical Engineering 3:272–285, DOI 10.1038/s44286-026-00389-w",
+  "claim_text": "Bounded reconstruction target: reported 1,3-propanediol production result of 141.5 g/L at 2.95 g/L/h without antibiotics.",
   "reported_value": 141.5,
   "unit": "g/L",
   "tolerance": null,
   "status": "PENDING",
   "dependencies": [
-    {"id":"publication","kind":"assertion","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"Primary publication."},
-    {"id":"source-data","kind":"source_observation","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Acquire persistent source-data package and hash local research copy if licensing permits."},
-    {"id":"genome-state","kind":"state","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Resolve deposited genome accession/version."},
-    {"id":"gem-state","kind":"state","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Pin exact genome-scale model/code revision used for relevant inference."},
-    {"id":"fermentation-state","kind":"state","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Resolve strain and process state underlying bounded titer/productivity claim."},
-    {"id":"claim-derivation","kind":"transformation","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Trace source measurements to reported titer and productivity."}
+    {"id":"publication","kind":"assertion","required":true,"availability":"available","source":null,"sha256":null,"version":"corrected version after 2026-05-21 author correction","notes":"Primary article published 2026-05-12; an author correction on 2026-05-21 changed wording in a toxicity section but explicitly stated that experimental data, results and conclusions were unaffected."},
+    {"id":"source-data","kind":"source_observation","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"Nature exposes source data and 37 supplementary XLSX datasets; the same study data are deposited at Figshare DOI 10.6084/m9.figshare.29264624. Byte-level acquisition/hash remains pending."},
+    {"id":"fermentation-datasets","kind":"source_observation","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"Supplementary Information explicitly includes Fermentation Datasets 1–30."},
+    {"id":"genome-state","kind":"state","required":true,"availability":"available","source":null,"sha256":null,"version":"JBSORY000000000 / BioProject PRJNA1370509","notes":"SC97 genome sequencing data are deposited in NCBI."},
+    {"id":"gem-state","kind":"state","required":false,"availability":"available","source":null,"sha256":null,"version":"GitHub commit 820b43d64f30f6326d5e5d23b38f89bb78355ab3 observed as current repository head","notes":"SC97-GEM public repository contains the standard and irreversible GEM. Repository history currently shows two commits dated 2026-01-23; no later commit was observed in the initial audit. This computational state is useful for cross-layer provenance but is not required to recompute the bounded fermentation titer itself."},
+    {"id":"process-simulation-state","kind":"state","required":false,"availability":"available","source":null,"sha256":null,"version":"Aspen Plus 15","notes":"Paper records Aspen Plus version 15 for process simulations; this is relevant to TEA/process conclusions, not required for the bounded titer."},
+    {"id":"fermentation-state","kind":"state","required":true,"availability":"available","source":null,"sha256":null,"version":null,"notes":"Article identifies the engineered SC97-derived system and antibiotic-free engineering underlying the 141.5 g/L / 2.95 g/L/h result. Exact bounded strain/process dependency graph still requires artifact-level extraction."},
+    {"id":"claim-derivation","kind":"transformation","required":true,"availability":"unknown","source":null,"sha256":null,"version":null,"notes":"Source/fermentation datasets are public, but independent recomputation of the final titer and productivity from released observations has not yet been completed."}
   ],
-  "findings": []
+  "findings": [
+    {"test":"T1","result":"PASS","evidence":"The article abstract explicitly reports 141.5 g/L 1,3-PDO at 2.95 g/L/h without antibiotics.","interpretation":"The bounded claim is unambiguous."},
+    {"test":"T2","result":"UNRESOLVED","evidence":"The paper exposes unusually extensive public source data, Figshare deposition, 30 fermentation datasets, genome sequence and model code; artifact-level mapping to the bounded titer is still in progress.","interpretation":"This is currently the strongest positive-reconstruction candidate, but dependency closure should not be asserted before replay."},
+    {"test":"T4","result":"UNRESOLVED","evidence":"A 2026-05-21 author correction changed article text after the 2026-05-12 publication. Current article state is corrected, while the exact original article byte state has not yet been archived by this project.","interpretation":"The case demonstrates why publication version/state belongs in scientific provenance even when the correction does not alter the bounded result."},
+    {"test":"T6","result":"UNRESOLVED","evidence":"Public evidence is sufficient to attempt replay, but the 141.5 g/L and 2.95 g/L/h values have not yet been independently recomputed by this project.","interpretation":"Keep status pending until reconstruction is executed."}
+  ]
 }
