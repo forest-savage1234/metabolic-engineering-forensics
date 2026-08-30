@@ -48,3 +48,40 @@ def test_digest_drift_is_inconsistent(tmp_path):
         }
     ]), tmp_path)
     assert result["status"] == "INCONSISTENT"
+
+
+def test_declared_identifier_conflict_is_inconsistent(tmp_path):
+    result = verify_module.verify(claim(
+        [{"id": "sequence-id", "required": True, "availability": "available"}],
+        [{
+            "test": "T3",
+            "result": "FAIL",
+            "evidence": "artifact A and artifact B assert different versioned identifiers",
+            "interpretation": "review required",
+        }],
+    ), tmp_path)
+    assert result["status"] == "INCONSISTENT"
+    assert result["blockers"]["declared_conflicts"] == ["T3"]
+
+
+def test_integrity_conflict_outranks_missing_dependency(tmp_path):
+    result = verify_module.verify(claim(
+        [{"id": "raw-data", "required": True, "availability": "missing"}],
+        [{
+            "test": "T3", "result": "FAIL", "evidence": "identifier mismatch",
+            "interpretation": "review required"
+        }],
+    ), tmp_path)
+    assert result["status"] == "INCONSISTENT"
+    assert result["blockers"]["unresolved_dependencies"] == ["raw-data"]
+
+
+def test_reconstruction_failure_is_inconsistent(tmp_path):
+    result = verify_module.verify(claim(
+        [{"id": "raw-data", "required": True, "availability": "available"}],
+        [{
+            "test": "T6", "result": "FAIL", "evidence": "recomputed value diverged",
+            "interpretation": "claim derivation did not reproduce"
+        }],
+    ), tmp_path)
+    assert result["status"] == "INCONSISTENT"
